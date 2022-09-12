@@ -1,0 +1,2 @@
+array = []
+print(len(array))
