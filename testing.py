@@ -1,2 +1,0 @@
-array = []
-print(len(array))
