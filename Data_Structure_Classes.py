@@ -1,6 +1,5 @@
 
 
-from curses.ascii import SO
 
 
 class hashTable:
@@ -41,7 +40,7 @@ class hashTable:
             inserted = False
             firstIndex = index
             while inserted == False:
-                if self.table[index][0] == " ":
+                if self.table[index][0] == " " or self.table[index][0] == "DELETED":
                     self.table[index] = [key, inputData]
                     inserted = True
                 elif self.size == (index + 1):
@@ -80,7 +79,7 @@ class hashTable:
         if index == "Not in Table":
             pass
         else:
-            self.table[index] = [" ", " "]
+            self.table[index] = ["DELETED", "DELETED"]
 
 
 def mergeSort(original):
@@ -88,10 +87,11 @@ def mergeSort(original):
     mergeSplit = []
     #global mergeOriginalLength
     #mergeOriginalLength = len(original)
-    Split(original)
+    mergeSortSplit(original)
     print(mergeSplit)
+    mergeSortCombine(mergeSplit)
 
-def Split(start):
+def mergeSortSplit(start):
     halfLength = round(len(start) / 2)
     new1, new2 = [], []
     for i in range(0, halfLength):
@@ -101,12 +101,13 @@ def Split(start):
     if len(new1) == 1:
         mergeSplit.append(new1)
     else:
-        Split(new1) 
+        mergeSortSplit(new1) 
     if len(new2) == 1:
         mergeSplit.append(new2)
     else:
-        Split(new2)
+        mergeSortSplit(new2)
 
 
-array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+
+array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 mergeSort(array)
