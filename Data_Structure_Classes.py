@@ -85,6 +85,8 @@ class hashTable:
 def mergeSort(original):
     global mergeSplit
     mergeSplit = []
+    global mergeResult
+    mergeResult = []
     #global mergeOriginalLength
     #mergeOriginalLength = len(original)
     mergeSortSplit(original)
@@ -107,6 +109,19 @@ def mergeSortSplit(start):
     else:
         mergeSortSplit(new2)
 
+def mergeSortCombine(mergeMiddle):
+    merging = []
+    if len(mergeMiddle) % 2 == 0:
+        halfLength = len(mergeMiddle) / 2
+        odd = True
+    else:
+        halfLength = (len(mergeMiddle) // 2) + 1
+        odd = False
+    for i in range(0, halfLength):
+        split1 = mergeMiddle[i]
+        if odd:
+            
+        
 
 
 array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
