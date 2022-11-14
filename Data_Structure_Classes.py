@@ -1,7 +1,5 @@
 
 
-
-
 class hashTable:
     def __init__(self, size: int):
         self.table = []
@@ -87,11 +85,9 @@ def mergeSort(original):
     mergeSplit = []
     global mergeResult
     mergeResult = []
-    #global mergeOriginalLength
-    #mergeOriginalLength = len(original)
     mergeSortSplit(original)
-    print(mergeSplit)
     mergeSortCombine(mergeSplit)
+    return mergeResult[0]
 
 def mergeSortSplit(start):
     halfLength = round(len(start) / 2)
@@ -112,17 +108,31 @@ def mergeSortSplit(start):
 def mergeSortCombine(mergeMiddle):
     merging = []
     if len(mergeMiddle) % 2 == 0:
-        halfLength = len(mergeMiddle) / 2
-        odd = True
+        halfLength = len(mergeMiddle) // 2
     else:
         halfLength = (len(mergeMiddle) // 2) + 1
-        odd = False
     for i in range(0, halfLength):
-        split1 = mergeMiddle[i]
-        if odd:
-            
-        
-
-
-array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-mergeSort(array)
+        split1 = mergeMiddle[2 * i]
+        try:
+            split2 = mergeMiddle[(2 * i) + 1]
+        except:
+            split2 = []
+        combine = []
+        while (len(split1) + len(split2)) != 0:
+            if len(split1) == 0:
+                combine.append(split2[0])
+                split2.pop(0)
+            elif len(split2) == 0:
+                combine.append(split1[0])
+                split1.pop(0)
+            elif split1[0] >= split2[0]:
+                combine.append(split1[0])
+                split1.pop(0)
+            elif split2[0] > split1[0]:
+                combine.append(split2[0])
+                split2.pop(0)
+        merging.append(combine)
+    if len(merging) == 1:
+        mergeResult.append(merging[0])
+    else:
+        mergeSortCombine(merging)
