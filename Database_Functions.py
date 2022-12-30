@@ -79,6 +79,7 @@ def testData():     #For testing
     for values in scoresValues:
         cursor.execute("""INSERT INTO Scores VALUES (?,?,?,?);""",(values[0],values[1],values[2],values[3]))
     print("\ntestData() successful")      #For testing
+    db.commit()
 
 
 def queryDatabase(query, data):
@@ -93,9 +94,10 @@ def queryDatabase(query, data):
             cursor.execute("""SELECT SaveData.Type, SaveData.Name, SaveData.Value FROM SaveData WHERE SaveData.SaveKey = (?) ORDER BY SaveData.Type;""", [data])
         case "userInfo":        #Displays key user info: Username,GameNo,DateCreated,Highscore,HighscoreDate
             cursor.execute("""SELECT Users.Username, Users.GameNo, Users.DateCreated, Scores.Points, Scores.DateAdded FROM Users LEFT OUTER JOIN Scores ON Users.Username = Scores.Username AND Scores.Points = (SELECT MAX(Scores.Points) FROM Scores WHERE Scores.Username = Users.Username)""")
-
-
+        case "gameNo":          #Displays current game number
+            cursor.execute("""SELECT Users.GameNo FROM Users WHERE Users.Username = (?);""", [data])
     inter = cursor.fetchall()
+    print(inter)
     result = []
     for i in inter:     #Reformats the results into 2D Array
         i = list(i)
@@ -109,13 +111,20 @@ def updateDatabase(query, data):
         case "addUser":     #Adds a new user
             cursor.execute("""INSERT INTO Users VALUES (?,?,?,?)""", (data[0],data[1],data[2],data[3]))
         case "addSave":     #Adds a new save
+            #save data stored in array in data[4],  data[4][type][name,value]
             cursor.execute("""INSERT INTO Saves VALUES (?,?,?)""", (data[0], data[1],data[2]))
-        case "addSaveData":     #Adds new save data
-            cursor.execute("""INSERT INTO SaveData VALUES (?,?,?,?)""", (data[0],data[1],data[2],data[3]))
-        case "addScore":        #Adds a new score
-            cursor.execute("""INSERT INTO Scores VALUES (?,?,?,?)""", (data[0],data[1],data[2],data[3]))
+        #case "addSaveData":     #Adds new save data
+        #    cursor.execute("""INSERT INTO SaveData VALUES (?,?,?,?)""", (data[0],data[1],data[2],data[3]))
+        case "addScore":        #Saves a new score and updates associated values
+            currentGameNo = queryDatabase("gameNo", data[0])
+            print(currentGameNo[0][0])
+            data.append((currentGameNo[0][0]) + 1)
+            print(data[3])
+            cursor.execute("""INSERT INTO Scores VALUES (?,?,?,?)""", (data[0],data[3],data[1],data[2]))
+            cursor.execute("""UPDATE Users SET GameNo = (?) WHERE Username = (?)""", (data[3],data[0]))
         case "changeStat":      #Updates a user stat
             cursor.execute("""UPDATE Stats SET StatValue = (?) WHERE Username = (?) AND StatName = (?)""", (data[0],data[1],data[2]))
+    print("\nupdateDatabase() successful")
     db.commit()
 
 
@@ -124,4 +133,4 @@ def updateDatabase(query, data):
 #testData()
 #db.commit()
 #print(queryDatabase("userInfo", "username2"))
-#updateDatabase("changeStat", [15,"Username1","stat1"])
+#updateDatabase("addScore", ["Username1",5,"2022/12/08"])
