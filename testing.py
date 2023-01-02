@@ -1,33 +1,26 @@
-import sqlite3
+import pygame
+pygame.init()
 
-with sqlite3.connect("Test.db") as db:
-    cursor = db.cursor()
-db.commit()
+# Set up the drawing window
+screen = pygame.display.set_mode([500, 500])
 
-cursor.execute("""DROP TABLE test;""")
-cursor.execute("""CREATE TABLE IF NOT EXISTS test(
-    Name VARCHAR(20),
-    Number INT,
-    Info VARCHAR(20),
-    PRIMARY KEY (Name)
-);""")
+# Run until the user asks to quit
+running = True
+while running:
 
-value1 = "abc"
-value2 = 11
+    # Did the user click the window close button?
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-cursor.execute("""INSERT INTO test(Name, Number, Info) VALUES (?,?,?);""",(value1, value2, "qwerty"))
-cursor.execute("""INSERT INTO test(Name, Number, Info) VALUES (?,?,?)""",("def", 232, "wasd"))
-db.commit
-selectAll = """SELECT * FROM test;"""
+    # Fill the background with white
+    screen.fill((255, 255, 255))
 
-def queryTable(query):
-    cursor.execute(query)
-    inter = cursor.fetchall()
-    result = []
-    for i in inter:
-        i = list(i)
-        result.append(i)
-    return result
+    # Draw a solid blue circle in the center
+    pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
 
-value = queryTable(selectAll)
-print(value)
+    # Flip the display
+    pygame.display.flip()
+
+# Done! Time to quit.
+pygame.quit()

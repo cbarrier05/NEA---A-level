@@ -92,13 +92,13 @@ def generateMaze(size):
                 usedTiles.append([xcoord, ycoord, "wall"])
     return usedTiles
 
-mazeSize = 5
-mazeArray = generateMaze(mazeSize)
-mazeSorted = sorted(mazeArray)
-for i in range(0,(2 * mazeSize) + 1):
-    printing = []
-    for x in mazeSorted:
-        if i == x[1]:
-            printing.append(x[2])
-    print(printing)
+#mazeSize = 5
+#mazeArray = generateMaze(mazeSize)
+#mazeSorted = sorted(mazeArray)
+#for i in range(0,(2 * mazeSize) + 1):
+#    printing = []
+#    for x in mazeSorted:
+#        if i == x[1]:
+#            printing.append(x[2])
+#    print(printing)
 #print(mazeSorted)
